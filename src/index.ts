@@ -1,52 +1,22 @@
-import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/d1';
 import { usersTable } from './db/schema';
 import { Hono } from 'hono';
-
-async function main() {
-    const user: typeof usersTable.$inferInsert = {
-        name: 'John',
-        age: 30,
-        email: 'john@example.com',
-    };
-
-    await db.insert(usersTable).values(user);
-    console.log('New user created!')
-
-    const users = await db.select().from(usersTable);
-    console.log('Getting all users from the database: ', users)
-    /*
-    const users: {
-      id: number;
-      name: string;
-      age: number;
-      email: string;
-    }[]
-    */
-
-    await db
-        .update(usersTable)
-        .set({
-            age: 31,
-        })
-        .where(eq(usersTable.email, user.email));
-    console.log('User info updated!')
-
-    await db.delete(usersTable).where(eq(usersTable.email, user.email));
-    console.log('User deleted!')
-}
-
-main();
+import { name } from 'drizzle-orm';
 
 type Bindings = {
     DB: D1Database;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
-const db = drizzle(process.env.DATABASE_URL!);
+
+
+app.get("/users", async (c) => {
+    const result = { name: "test" };
+    return c.json(result);
+});
 
 app.post("/users", async (c) => {
+    const db = drizzle(c.env.DB);
     const params = await c.req.json<typeof usersTable.$inferSelect>();
 
     const result = await db.insert(usersTable).values(params);
