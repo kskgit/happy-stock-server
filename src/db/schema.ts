@@ -6,3 +6,10 @@ export const usersTable = sqliteTable("users", {
     age: integer("age").notNull(),
     email: text("email").notNull().unique(),
 });
+
+export const stocksTable = sqliteTable("stocks", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    title: text("name").notNull(),
+    day_of_week: text({ enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday',] }),
+    notification_time: text("notification_time"),
+});

@@ -23,4 +23,12 @@ app.post("/users", async (c) => {
     return c.json(result);
 });
 
+app.post("/users", async (c) => {
+    const db = drizzle(c.env.DB);
+    const params = await c.req.json<typeof usersTable.$inferSelect>();
+
+    const result = await db.insert(usersTable).values(params);
+    return c.json(result);
+});
+
 export default app;
