@@ -8,3 +8,13 @@ content-type: application/json
     "age": 30,
     "email": "test@test.com"
 }
+
+###
+POST http://localhost:8787/stocks HTTP/1.1
+content-type: application/json
+
+{
+    "title": "アニメを見る",
+    "day_of_week": "sunday",
+    "notification_time": "10:00:00"
+}
